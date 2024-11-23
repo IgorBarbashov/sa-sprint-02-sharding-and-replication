@@ -1,0 +1,302 @@
+name: mongo-sharding-repl
+
+services:
+# Router
+  mongos_router_1:
+    image: mongo:latest
+    container_name: mongos_router_1
+    restart: always
+    ports:
+      - "27021:27017"
+    networks:
+      app-network:
+    command:
+      [
+        "mongos",
+        "--configdb",
+        "rs_configSrv/configSrv_1:27019,configSrv_2:27019",
+        "--bind_ip_all",
+        "--port",
+        "27017"
+      ]
+    volumes:
+      - ./scripts:/scripts
+      - mongos_router_1_db:/data/db
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  mongos_router_2:
+    image: mongo:latest
+    container_name: mongos_router_2
+    restart: always
+    ports:
+      - "27020:27017"
+    networks:
+      app-network:
+    command:
+      [
+        "mongos",
+        "--configdb",
+        "rs_configSrv/configSrv_1:27019,configSrv_2:27019",
+        "--bind_ip_all",
+        "--port",
+        "27017"
+      ]
+    volumes:
+      - ./scripts:/scripts
+      - mongos_router_2_db:/data/db
+    links:
+      - mongos_router_1
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+# Config Servers
+  configSrv_1:
+    image: mongo:latest
+    container_name: configSrv_1
+    restart: always
+    ports:
+      - "27019:27019"
+    networks:
+      app-network:
+    volumes:
+      - ./scripts:/scripts
+      - configSrv_1_config_data:/data/db
+    command:
+      [
+        "--configsvr",
+        "--replSet",
+        "rs_configSrv",
+        "--bind_ip_all",
+        "--port",
+        "27019"
+      ]
+    links:
+      - shard_1_1
+      - shard_2_1
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  configSrv_2:
+    image: mongo:latest
+    container_name: configSrv_2
+    restart: always
+    ports:
+      - "27018:27019"
+    networks:
+      app-network:
+    volumes:
+      - ./scripts:/scripts
+      - configSrv_2_config_data:/data/db
+    command:
+      [
+        "--configsvr",
+        "--replSet",
+        "rs_configSrv",
+        "--bind_ip_all",
+        "--port",
+        "27019"
+      ]
+    links:
+      - configSrv_1
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+# Shard 1
+  shard_1_1:
+    container_name: shard_1_1
+    image: mongo:latest
+    volumes:
+      - ./scripts:/scripts
+      - shard_1_1_data_container:/data/db
+    restart: always
+    ports:
+      - "27117:27018"
+    networks:
+      app-network:
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "rs_shard_1",
+        "--bind_ip_all",
+        "--port",
+        "27018"
+      ]
+    links:
+      - shard_1_2
+      - shard_1_3
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  shard_1_2:
+    container_name: shard_1_2
+    image: mongo:latest
+    volumes:
+      - ./scripts:/scripts
+      - shard_1_2_data_container:/data/db
+    restart: always
+    ports:
+      - "27118:27018"
+    networks:
+      app-network:
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "rs_shard_1",
+        "--bind_ip_all",
+        "--port",
+        "27018"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  shard_1_3:
+    container_name: shard_1_3
+    image: mongo:latest
+    volumes:
+      - ./scripts:/scripts
+      - shard_1_3_data_container:/data/db
+    restart: always
+    ports:
+      - "27119:27018"
+    networks:
+      app-network:
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "rs_shard_1",
+        "--bind_ip_all",
+        "--port",
+        "27018"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+# Shard 2
+  shard_2_1:
+    container_name: shard_2_1
+    image: mongo:latest
+    volumes:
+      - ./scripts:/scripts
+      - shard_2_1_data_container:/data/db
+    restart: always
+    ports:
+      - "27217:27018"
+    networks:
+      app-network:
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "rs_shard_2",
+        "--bind_ip_all",
+        "--port",
+        "27018"
+      ]
+    links:
+      - shard_2_2
+      - shard_2_3
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  shard_2_2:
+    container_name: shard_2_2
+    image: mongo:latest
+    volumes:
+      - ./scripts:/scripts
+      - shard_2_2_data_container:/data/db
+    restart: always
+    ports:
+      - "27218:27018"
+    networks:
+      app-network:
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "rs_shard_2",
+        "--bind_ip_all",
+        "--port",
+        "27018"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  shard_2_3:
+    container_name: shard_2_3
+    image: mongo:latest
+    volumes:
+      - ./scripts:/scripts
+      - shard_2_3_data_container:/data/db
+    restart: always
+    ports:
+      - "27219:27018"
+    networks:
+      app-network:
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "rs_shard_2",
+        "--bind_ip_all",
+        "--port",
+        "27018"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+# Pymongo API
+  MONGpymongo_api:
+    container_name: pymongo_api
+    build:
+      context: api_app
+      dockerfile: Dockerfile
+    image: pymongo_api
+    depends_on:
+      - mongos_router_1
+    networks:
+      app-network:
+    ports:
+      - 8080:8080
+    environment:
+      MONGODB_URL: "mongodb://mongos_router_1"
+      MONGODB_DATABASE_NAME: "somedb"
+      MONGODB_COLLECTION_NAME: "helloDoc"
+
+networks:
+  app-network:
+
+volumes:
+  mongos_router_1_db:
+  mongos_router_2_db:
+  configSrv_1_config_data:
+  configSrv_2_config_data:
+  shard_1_1_data_container:
+  shard_1_2_data_container:
+  shard_1_3_data_container:
+  shard_2_1_data_container:
+  shard_2_2_data_container:
+  shard_2_3_data_container:
