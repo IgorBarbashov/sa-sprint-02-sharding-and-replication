@@ -29,6 +29,8 @@ app.add_middleware(
 
 DATABASE_URL = os.environ["MONGODB_URL"]
 DATABASE_NAME = os.environ["MONGODB_DATABASE_NAME"]
+COLLECTION_NAME = os.environ["MONGODB_COLLECTION_NAME"]
+
 REDIS_URL = os.getenv("REDIS_URL", None)
 
 
@@ -103,7 +105,18 @@ async def root():
         shards_list = await client.admin.command("listShards")
         shards = {}
         for shard in shards_list.get("shards", {}):
-            shards[shard["_id"]] = shard["host"]
+            shard_url = "mongodb://" + shard["host"].split("/")[1]
+            shard_client = motor.motor_asyncio.AsyncIOMotorClient(shard_url)
+            shard_db = shard_client[DATABASE_NAME]
+            shard_collection = shard_db.get_collection(COLLECTION_NAME)
+            shard_collection_count = await shard_collection.count_documents({})
+            shard_client.close()
+
+            shards[shard["_id"]] = {
+                "host": shard["host"],
+                "url": shard_url,
+                "docs_count": shard_collection_count,
+            }
 
     cache_enabled = False
     if REDIS_URL:

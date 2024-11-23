@@ -1,4 +1,4 @@
-FROM python:3.12.1-slim
+FROM kazhem/pymongo_api:1.0.0
 WORKDIR /app
 EXPOSE 8080
 COPY requirements.txt ./
