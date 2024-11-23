@@ -110,15 +110,17 @@ async def root():
             shard_db = shard_client[DATABASE_NAME]
             shard_collection = shard_db.get_collection(COLLECTION_NAME)
             shard_collection_count = await shard_collection.count_documents({})
-            shard_client.close()
-
-            hosts = shard["host"].split("/")[-1].split(",")
 
             shards[shard["_id"]] = {
                 "host": shard["host"],
                 "docs_count": shard_collection_count,
-                "hosts": hosts,
+                "topology_type": shard_client.topology_description.topology_type_name,
+                "nodes": str(shard_client.nodes),
+                "primary_host": str(shard_client.primary),
+                "secondary_hosts": str(shard_client.secondaries),
             }
+
+            shard_client.close()
 
     cache_enabled = False
     if REDIS_URL:

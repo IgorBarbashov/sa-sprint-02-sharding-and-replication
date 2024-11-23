@@ -8,4 +8,4 @@ use somedb;
 
 console.log("Creating records in the \"helloDoc\" collection...");
 
-for(var i = 0; i < 1300; i++) db.helloDoc.insertOne({age:i, name:"ly"+i})
+for(var i = 0; i < 1000; i++) db.helloDoc.insertOne({age:i, name:"ly"+i})

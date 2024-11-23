@@ -2,7 +2,7 @@
 
 - [Шардирование](#sharding) ([диаграмма](https://cloud.mail.ru/public/YqDr/kycAf2vHG))
 - [Репликация](#replication) ([диаграмма](https://cloud.mail.ru/public/2gjA/jzfRPCuC8))
-- [Кэширование](#cache)
+- [Кэширование](#cache) ([диаграмма](https://cloud.mail.ru/public/x3tG/1gSV6Qwv5))
 
 ---
 
@@ -44,3 +44,17 @@
 ---
 
 **<p id="cache">Кэширование</p>**
+
+1. Кэширования данных будем реализовывать на основе `Redis`
+
+
+2. По условиям задачи нам достаточно внедрить кэширование на базе `Redis` в режиме `stand-alone`. Для этого достаточно развернуть один инстанс `Redis`.
+
+
+3. Конфигурация всей системы на этом этапе будет состоять из:
+   - два инстанса роутера (mongos_router)
+   - два инстанса с конфигурацией (configSrv)
+   - два шарда (shard) по три инстанса MongoDB в каждом - один Primary и два Secondary узла
+   - один инстанс Redis (redis)
+
+Результат: [диаграмма](https://cloud.mail.ru/public/x3tG/1gSV6Qwv5) | [реализация](../04-sharding-repl-cache-stand-alone/README.md)
