@@ -36,7 +36,8 @@ docker compose up -d --build
 - [Задание 1. Планирование этапов шардирование, репликация, кэширование](01-planing/README.md)
 - [Задание 2. Реализация задания Шардирование](02-mongo-sharding/README.md)
 - [Задание 3. Реализация задания Репликация](03-mongo-sharding-repl/README.md)
-- [Задание 4. Реализация задания Кэширование](04-sharding-repl-cache/README.md)
+- [Задание 4. Реализация задания Кэширование (stand-alone)](04-sharding-repl-cache/README.md)
+  - [Задание 4.1. Дополнительно - Кэширование на Cluster Redis](04-sharding-repl-cache-cluster/README.md) | [Диаграмма](https://cloud.mail.ru/public/wVyP/BKNKXczeX)
 - Задание 5. Service Discovery и балансировка с API Gateway - проектирование
 - Задание 6. CDN - проектирование
 
