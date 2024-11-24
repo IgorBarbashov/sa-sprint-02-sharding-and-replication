@@ -1,7 +1,7 @@
 ### Проектная работа 2 спринта: Горизонтальное масштабирование
 
 Результат:
-- Итоговая схема с выполненными заданиями 1, 5, 6
+- [Итоговая схема с выполненными заданиями 1, 5, 6](https://cloud.mail.ru/public/X6NX/gs3acMEEv)
 - [Итоговая реализация с выполненными заданиями 2, 3, 4 (sharding-repl-cache)](04-sharding-repl-cache/README.md)
 
 Как запустить:
@@ -38,8 +38,8 @@ docker compose up -d --build
 - [Задание 3. Реализация задания Репликация](03-mongo-sharding-repl/README.md)
 - [Задание 4. Реализация задания Кэширование (stand-alone)](04-sharding-repl-cache/README.md)
   - [Задание 4.1. Дополнительно - Кэширование на Cluster Redis](04-sharding-repl-cache-cluster/README.md) | [Диаграмма](https://cloud.mail.ru/public/wVyP/BKNKXczeX)
-- Задание 5. Service Discovery и балансировка с API Gateway - проектирование
-- Задание 6. CDN - проектирование
+- [Задание 5. Service Discovery и балансировка с API Gateway - проектирование](https://cloud.mail.ru/public/Ys8R/8juocsSWy)
+- [Задание 6. CDN - проектирование](https://cloud.mail.ru/public/X6NX/gs3acMEEv)
 
 ---
 
