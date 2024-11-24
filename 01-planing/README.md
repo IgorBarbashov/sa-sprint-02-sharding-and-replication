@@ -57,4 +57,4 @@
    - два шарда (shard) по три инстанса MongoDB в каждом - один Primary и два Secondary узла
    - один инстанс Redis (redis)
 
-Результат: [диаграмма](https://cloud.mail.ru/public/x3tG/1gSV6Qwv5) | [реализация](../04-sharding-repl-cache-stand-alone/README.md)
+Результат: [диаграмма](https://cloud.mail.ru/public/x3tG/1gSV6Qwv5) | [реализация](../04-sharding-repl-cache/README.md)

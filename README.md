@@ -2,9 +2,33 @@
 
 Результат:
 - Итоговая схема с выполненными заданиями 1, 5, 6
-- Итоговая реализация с выполненными заданиями 2, 3, 4 (sharding-repl-cache)
+- [Итоговая реализация с выполненными заданиями 2, 3, 4 (sharding-repl-cache)](04-sharding-repl-cache/README.md)
 
 Как запустить:
+
+```
+git clone https://github.com/IgorBarbashov/sa-sprint-02-sharding-and-replication.git
+```
+
+```
+git checkout sprint_2
+```
+
+```
+cd 04-sharding-repl-cache
+```
+
+Запускаем все сервисы
+
+```bash
+docker compose up -d --build
+```
+
+Инициализация кластера MongoDB, настройка шардирования, реплик, кэша и наполнение БД
+
+```bash
+./scripts/mongo-init.sh
+```
 
 ---
 
