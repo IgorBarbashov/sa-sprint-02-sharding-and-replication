@@ -45,4 +45,4 @@ docker compose up -d --build
 
 Дополнительно:
 - Настройка с помощью Mongo Atlas
-- Настройка в Yandex Cloud
+- [Настройка в Yandex Cloud](05-yandex-cloud)
