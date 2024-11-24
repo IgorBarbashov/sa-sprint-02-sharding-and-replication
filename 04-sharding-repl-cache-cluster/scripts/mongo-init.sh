@@ -15,3 +15,6 @@ sleep 20
 
 # Инициализируем роутер, включаем шардинг, наполняем БД
 docker exec mongos_router_1 sh -c "mongosh < ./scripts/init_router.js"
+
+# Инициализируем кластер Redis
+docker exec redis_1 sh -c "echo \"yes\" | redis-cli --cluster create   redis_1:6379   redis_2:6379   redis_3:6379   redis_4:6379   redis_5:6379   redis_6:6379   --cluster-replicas 1"
